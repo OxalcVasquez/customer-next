@@ -3,11 +3,11 @@ import { IType } from "./type";
 export interface ICustomer {
   id: number,
   name: string,
-  lastName: string,
+  last_name: string,
   email: string,
   phone: string,
   status: boolean,
-  typeId: number,
+  type_id: number,
   type: IType
 }
 
