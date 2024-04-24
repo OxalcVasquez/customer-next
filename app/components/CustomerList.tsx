@@ -1,9 +1,10 @@
 import React from "react";
 import { ICustomer } from "../types/customer";
 import Customer from "./Customer";
+import { IType } from "../types/type";
 
 interface CustomerListProps {
-  customers: ICustomer[]
+  customers: ICustomer[];
 }
 
 const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
@@ -22,7 +23,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
         </thead>
         <tbody>
           {customers && customers.map((customer) => (
-          <Customer key={customer.id} customer={customer} />
+          <Customer key={customer.id} customer={customer}  />
           ))}
         </tbody>
         {/* foot */}
