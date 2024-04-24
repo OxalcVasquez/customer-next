@@ -5,9 +5,10 @@ import { IType } from "../types/type";
 
 interface CustomerListProps {
   customers: ICustomer[];
+  types : IType[];
 }
 
-const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
+const CustomerList: React.FC<CustomerListProps> = ({ customers, types}) => {
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -23,7 +24,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
         </thead>
         <tbody>
           {customers && customers.map((customer) => (
-          <Customer key={customer.id} customer={customer}  />
+          <Customer key={customer.id} customer={customer} types={types} />
           ))}
         </tbody>
         {/* foot */}

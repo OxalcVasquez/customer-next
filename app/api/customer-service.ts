@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { ICustomer, ICustomerCreate } from "../types/customer"
+import { ICustomer, ICustomerCreate, ICustomerUpdate } from "../types/customer"
 
 const baseUrl = "http://localhost:8080/api/customers"
 
@@ -21,4 +21,18 @@ export const createCustomer = async (customer: ICustomerCreate):Promise<ICustome
   const newCustomer = await res.json();
 
   return newCustomer;
+}
+
+export const updateCustomer = async (customer: ICustomerUpdate):Promise<ICustomer>=> {
+  const res = await fetch(`${baseUrl}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(customer)
+  })
+
+  const updateCustomer = await res.json();
+
+  return updateCustomer;
 }

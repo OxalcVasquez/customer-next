@@ -15,7 +15,7 @@ export default async function Home() {
       <div className="my-5 flex flex-col gap-4 text-center">
         <h1 className="text-center text-2xl font-bold">Gestión de Clientes</h1>
         <CreateCustomer types={types} />
-        <CustomerList customers={customers}/>
+        <CustomerList customers={customers} types={types}/>
       </div>
     </main>
   );
