@@ -1,3 +1,5 @@
+import { IType } from "./type";
+
 export interface ICustomer {
   id: number,
   name: string,
@@ -5,5 +7,6 @@ export interface ICustomer {
   email: string,
   phone: string,
   status: number,
-  typeId: number
+  typeId: number,
+  type: IType
 }

@@ -47,7 +47,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
               <td>{customer.status}</td>
               <th>
                 <button className="btn btn-ghost btn-xs">
-                  {customer.typeId}
+                  {customer.type.type}
                 </button>
               </th>
             </tr>
