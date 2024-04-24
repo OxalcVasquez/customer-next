@@ -7,7 +7,7 @@ import { FaUserEdit } from "react-icons/fa";
 import { FaUserMinus } from "react-icons/fa6";
 import Modal from './Modal';
 import { IType } from '../types/type';
-import { updateCustomer } from '../api/customer-service';
+import { deleteCustomer, updateCustomer } from '../api/customer-service';
 import { useRouter } from 'next/navigation';
 
 
@@ -43,6 +43,12 @@ const Customer:React.FC<CustomerProps> = ({customer, types}) => {
     router.refresh();
     setModalEdit(false);
   }
+   const handleDeleteCustomer = async () => {
+    await deleteCustomer(customer.id);
+    router.refresh();
+    setModalEdit(false);
+  }
+
   return (
     <tr key={customer.id}>
       <td>
@@ -75,7 +81,12 @@ const Customer:React.FC<CustomerProps> = ({customer, types}) => {
       </td>
       <td>
         <div className="flex flex-row gap-4">
-          <FaUserEdit className="text-warning" cursor="pointer" size={20} onClick={() => setModalEdit(true)} />
+          <FaUserEdit
+            className="text-warning"
+            cursor="pointer"
+            size={20}
+            onClick={() => setModalEdit(true)}
+          />
           <Modal modalOpen={openModalEdit} setModalOpen={setModalEdit}>
             <form onSubmit={handleSubmitUpdateCustomer}>
               <h3 className="font-bold text-lg">Actualizar cliente</h3>
@@ -152,7 +163,13 @@ const Customer:React.FC<CustomerProps> = ({customer, types}) => {
               </div>
             </form>
           </Modal>
-          <FaUserMinus className="text-error" cursor="pointer" size={20} />
+          <FaUserMinus className="text-error" cursor="pointer" size={20} onClick={() => setModalDelete(true)} />
+          <Modal modalOpen={openModalDelete} setModalOpen={setModalDelete}>
+             <h3 className="text-larg">Estas seguro, que deseas eliminar este cliente?</h3>
+              <div className="modal-action">
+                <button onClick={() => handleDeleteCustomer()}>Sí, estoy seguro</button>
+                </div>
+           </Modal>
         </div>
       </td>
     </tr>

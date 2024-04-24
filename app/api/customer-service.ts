@@ -36,3 +36,10 @@ export const updateCustomer = async (customer: ICustomerUpdate):Promise<ICustome
 
   return updateCustomer;
 }
+
+export const deleteCustomer = async (customerId : number):Promise<void>=> {
+  const res = await fetch(`${baseUrl}/${customerId}`, {
+    method: 'DELETE',
+  });
+
+}
