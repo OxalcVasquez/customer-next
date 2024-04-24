@@ -4,6 +4,8 @@ import { RiUserAddFill } from "react-icons/ri";
 import Modal from "./Modal";
 import { IType } from "../types/type";
 import { getAllTypeCustomers } from "../api/type-customer";
+import { createCustomer } from "../api/customer-service";
+import { useRouter } from "next/navigation";
 
 interface CreateCustomerProps {
   types: IType[];
@@ -17,15 +19,29 @@ export const CreateCustomer: React.FC<CreateCustomerProps> = ({types}) => {
   const [telefono, setTelefono] = useState("");
   const [tipoCliente, setTipoCliente] = useState({ id: 0, type: "" });
   const [estado, setEstado] = useState(true);
+  const router = useRouter();
 
-  const handleSubmitCreateCustomer: FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmitCreateCustomer: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    clearFields()
+
+    await createCustomer({
+      name: nombres,
+      last_name: apellidos,
+      email: correo,
+      phone: telefono,
+      status: estado,
+      type_id: tipoCliente.id,
+    });
+
+    setModalOpen(false);
+    router.refresh();
+    clearFields();
   };
 
   const clearFields = ()  => {
       setNombres("");
       setApellidos("");
+      setCorreo("");
       setTelefono("");
       setEstado(true);
       setTipoCliente({ id: 0, type: "" });

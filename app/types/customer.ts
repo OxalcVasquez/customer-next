@@ -6,7 +6,16 @@ export interface ICustomer {
   lastName: string,
   email: string,
   phone: string,
-  status: number,
+  status: boolean,
   typeId: number,
   type: IType
+}
+
+export interface ICustomerCreate {
+  name: string,
+  last_name: string,
+  email: string,
+  phone: string,
+  status: boolean,
+  type_id: number,
 }
