@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
 import { ICustomer, ICustomerCreate, ICustomerUpdate } from "../types/customer"
+import { config } from '../config/config';
 
-const baseUrl = "http://localhost:8080/api/customers"
+
+const baseUrl = `${config.baseUrl}/customers`;
 
 export const getAllCustomers = async ():Promise<ICustomer[]> => {
   const res = await fetch(`${baseUrl}`, { cache: 'no-store' });
