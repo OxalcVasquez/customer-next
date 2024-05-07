@@ -9,7 +9,8 @@ import Modal from './Modal';
 import { IType } from '../types/type';
 import { deleteCustomer, updateCustomer } from '../api/customer-service';
 import { useRouter } from 'next/navigation';
-
+import Alert from './Alert'
+import { showAlert } from "../utils/helper";
 
 interface CustomerProps {
   customer: ICustomer;
@@ -27,27 +28,40 @@ const Customer:React.FC<CustomerProps> = ({customer, types}) => {
   const [tipoCliente, setTipoCliente] = useState({ id: customer.type.id, type: customer.type.type });
   const [estado, setEstado] = useState(customer.status);
   const router = useRouter();
+  const [showAlertWarning, setshowAlertWarning] = useState(false);
+  const [showAlertSuccess, setShowAlertSuccess] = useState(false);
+  const [showAlertError, setShowAlertError] = useState(false);
 
   const handleSubmitUpdateCustomer:FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
+      if (validateFields()) {
+        await updateCustomer({
+          id: customer.id,
+          name: nombres,
+          last_name: apellidos,
+          email: correo,
+          phone: telefono,
+          status: estado,
+          type_id: tipoCliente.id,
+        });
+        router.refresh();
+        setModalEdit(false);
+        showAlert(setShowAlertSuccess);
+      } else {
+        showAlert(setshowAlertWarning);
+      }
 
-    await updateCustomer({
-      id: customer.id,
-      name: nombres,
-      last_name: apellidos,
-      email: correo,
-      phone: telefono,
-      status: estado,
-      type_id: tipoCliente.id,
-    });
-    router.refresh();
-    setModalEdit(false);
   }
    const handleDeleteCustomer = async () => {
     await deleteCustomer(customer.id);
     router.refresh();
-    setModalEdit(false);
+    showAlert(setShowAlertError);
+    setModalDelete(false);
   }
+
+    const validateFields = () => {
+      return nombres !== "" && apellidos !== "" && correo !== "";
+    };
 
   return (
     <tr key={customer.id}>
@@ -163,15 +177,39 @@ const Customer:React.FC<CustomerProps> = ({customer, types}) => {
               </div>
             </form>
           </Modal>
-          <FaUserMinus className="text-error" cursor="pointer" size={20} onClick={() => setModalDelete(true)} />
+          <FaUserMinus
+            className="text-error"
+            cursor="pointer"
+            size={20}
+            onClick={() => setModalDelete(true)}
+          />
           <Modal modalOpen={openModalDelete} setModalOpen={setModalDelete}>
-             <h3 className="text-larg">Estas seguro, que deseas eliminar este cliente?</h3>
-              <div className="modal-action">
-                <button onClick={() => handleDeleteCustomer()}>Sí, estoy seguro</button>
-                </div>
-           </Modal>
+            <h3 className="text-larg">
+              Estas seguro, que deseas eliminar este cliente?
+            </h3>
+            <div className="modal-action">
+              <button onClick={() => handleDeleteCustomer()}>
+                Sí, estoy seguro
+              </button>
+            </div>
+          </Modal>
         </div>
       </td>
+      <Alert
+        showAlert={showAlertWarning}
+        type="warning"
+        message="Advertencia : Por favor completar los campos obligatorios!"
+      />
+      <Alert
+        showAlert={showAlertError}
+        type="error"
+        message="Info : Cliente eliminado"
+      />
+      <Alert
+        showAlert={showAlertSuccess}
+        type="success"
+        message="Éxito: Cliente actualizado"
+      />
     </tr>
   );
 }
