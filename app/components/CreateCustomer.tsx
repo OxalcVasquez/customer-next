@@ -6,6 +6,8 @@ import { IType } from "../types/type";
 import { getAllTypeCustomers } from "../api/type-customer";
 import { createCustomer } from "../api/customer-service";
 import { useRouter } from "next/navigation";
+import Alert from "./Alert";
+import { showAlert } from "../utils/helper";
 
 interface CreateCustomerProps {
   types: IType[];
@@ -19,19 +21,35 @@ export const CreateCustomer: React.FC<CreateCustomerProps> = ({types}) => {
   const [telefono, setTelefono] = useState("");
   const [tipoCliente, setTipoCliente] = useState({ id: 0, type: "" });
   const [estado, setEstado] = useState(true);
+  const [showAlertWarning, setshowAlertWarning] = useState(false);
+  const [showAlertSuccess, setShowAlertSuccess] = useState(false);
+  const [showAlertError, setShowAlertError] = useState(false);
+
   const router = useRouter();
 
   const handleSubmitCreateCustomer: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    await createCustomer({
-      name: nombres,
-      last_name: apellidos,
-      email: correo,
-      phone: telefono,
-      status: estado,
-      type_id: tipoCliente.id,
-    });
+    if (validateFields()){
+      setshowAlertWarning(false);
+       const newCustomer = await createCustomer({
+       name: nombres,
+       last_name: apellidos,
+       email: correo,
+       phone: telefono,
+       status: estado,
+       type_id: tipoCliente.id,
+     });
+       if (newCustomer === null) {
+        showAlert(setShowAlertError);
+       } else {
+        showAlert(setShowAlertSuccess);
+       }
+    } else {
+        showAlert(setshowAlertWarning);
+
+    }
+
 
     setModalOpen(false);
     router.refresh();
@@ -46,6 +64,10 @@ export const CreateCustomer: React.FC<CreateCustomerProps> = ({types}) => {
       setEstado(true);
       setTipoCliente({ id: 0, type: "" });
   }
+
+  const validateFields = () => {
+    return nombres !== "" && apellidos !== "" && correo !== "";
+  };
 
   return (
     <div className="">
@@ -131,6 +153,21 @@ export const CreateCustomer: React.FC<CreateCustomerProps> = ({types}) => {
           </div>
         </form>
       </Modal>
+      <Alert
+        showAlert={showAlertWarning}
+        type="warning"
+        message="Advertencia : Por favor completar los campos obligatorios!"
+      />
+      <Alert
+        showAlert={showAlertError}
+        type="error"
+        message="Error: Sucedió un error creando al cliente"
+      />
+      <Alert
+        showAlert={showAlertSuccess}
+        type="success"
+        message="Éxito: Cliente creado"
+      />
     </div>
   );
 };
