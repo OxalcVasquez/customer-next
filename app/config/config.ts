@@ -1,3 +1,3 @@
 export const config = {
-  baseUrl: "http://localhost:8585/api"
+  baseUrl: "https://customers-go.onrender.com/api"
 };
